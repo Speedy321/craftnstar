@@ -1,0 +1,16 @@
+[
+{
+  "modid": "craftnstar",
+  "name": "Craftable Nether Star +",
+  "description": "Lets you craft the nether star and some other hard to obtain items",
+  "version": "0.3.0",
+  "mcversion": "1.8.9",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Speedy3210"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
