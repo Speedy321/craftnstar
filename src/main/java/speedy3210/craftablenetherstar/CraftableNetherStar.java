@@ -1,5 +1,7 @@
 package speedy3210.craftablenetherstar;
 
+import com.typesafe.config.Config;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -24,6 +26,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 @Mod(modid = CraftableNetherStar.MODID, name = CraftableNetherStar.NAME, version = CraftableNetherStar.VERSION)
 public class CraftableNetherStar{
@@ -36,7 +39,12 @@ public class CraftableNetherStar{
     public static boolean ghastTearRecipe = true;
     public static boolean blazePowderRecipe = true;
     public static boolean enderPearlRecipe = true;
-	
+    public static boolean slimeBallRecipe = true;
+	public static boolean stringRecipe = true;
+	public static boolean boneRecipes = true;
+	public static boolean nameTagRecipe = true;
+	public static boolean saddleRecipe = true;
+    
     public static final String MODID = "craftnstar";
     public static final String VERSION = "0.3.0";
     public static final String NAME = "Craftable Nether Star +";
@@ -50,9 +58,9 @@ public class CraftableNetherStar{
     ItemStack crDiamond = new ItemStack(Items.diamond);
     ItemStack crBlazePwdr = new ItemStack(Items.blaze_powder);
     ItemStack crBlazeRod = new ItemStack(Items.blaze_rod);
-    ItemStack crLapis = new ItemStack(Items.dye);
-    ItemStack crCacGreen = new ItemStack(Items.dye);
     ItemStack crGlowPwdr =  new ItemStack(Items.glowstone_dust);
+    ItemStack crFlint = new ItemStack(Items.flint);
+    ItemStack crString = new ItemStack(Items.string);
     
     @Instance(value = CraftableNetherStar.MODID)
     public static CraftableNetherStar instance;
@@ -62,9 +70,6 @@ public class CraftableNetherStar{
     	
     	config = new Configuration(event.getSuggestedConfigurationFile());
     	syncConfig();
-    	
-    	crLapis.setItemDamage(4);
-    	crCacGreen.setItemDamage(2);
     	
     	createItems();
     	addRecipes();
@@ -101,6 +106,11 @@ public class CraftableNetherStar{
     	ghastTearRecipe = config.getBoolean("Enable Ghast Tear Recipe", Configuration.CATEGORY_GENERAL, ghastTearRecipe, "true = enabled");
     	blazePowderRecipe = config.getBoolean("Enable Blaze Powder Recipe", Configuration.CATEGORY_GENERAL, blazePowderRecipe, "true = enabled");
     	enderPearlRecipe = config.getBoolean("Enable EnderPearl Recipe", Configuration.CATEGORY_GENERAL, enderPearlRecipe, "true = enabled");
+    	slimeBallRecipe = config.getBoolean("Enable Slime Ball Recipe", Configuration.CATEGORY_GENERAL, slimeBallRecipe, "true = enabled");
+    	stringRecipe = config.getBoolean("Enable String Recipe", Configuration.CATEGORY_GENERAL, stringRecipe, "true = enabled");
+    	boneRecipes = config.getBoolean("Enable Bone Recipes", Configuration.CATEGORY_GENERAL, boneRecipes, "true = enabled");
+    	nameTagRecipe = config.getBoolean("Enable Name Tag Recipe", Configuration.CATEGORY_GENERAL, nameTagRecipe, "true = enabled");
+    	saddleRecipe = config.getBoolean("Enable Saddle Recipe", Configuration.CATEGORY_GENERAL, saddleRecipe, "true = enabled");
     	
     	if (config.hasChanged()) config.save();	
     	
@@ -132,10 +142,25 @@ public class CraftableNetherStar{
     		GameRegistry.addShapelessRecipe(new ItemStack(bottledTear), new ItemStack(Items.water_bucket), new ItemStack(Items.glass_bottle), new ItemStack(Blocks.soul_sand));
     	}
     	if(enderPearlRecipe)
-    		GameRegistry.addRecipe(new ItemStack(Items.ender_pearl), "glg", "lql", "glg", 'g', crCacGreen, 'l', crLapis, 'q', new ItemStack(Items.quartz));
-    	
+    		GameRegistry.addRecipe(new ItemStack(Items.ender_pearl), "glg", "lql", "glg", 'g', new ItemStack(Items.dye, 1, 2), 'l', new ItemStack(Items.dye, 1, 4), 'q', new ItemStack(Items.quartz));
     	if(blazePowderRecipe)
     		GameRegistry.addShapelessRecipe(new ItemStack(Items.blaze_powder), new ItemStack(Items.glowstone_dust), new ItemStack(Items.redstone));
+    	if(slimeBallRecipe)
+    		GameRegistry.addShapelessRecipe(new ItemStack(Items.slime_ball), new ItemStack(Items.water_bucket), new ItemStack(Items.clay_ball), new ItemStack(Items.dye, 1, 10));
+    	if(stringRecipe)
+    		GameRegistry.addShapedRecipe(new ItemStack(Items.string), " c", "c ", 'c', new ItemStack(Items.reeds));
+    	if(boneRecipes){
+    		GameRegistry.addShapelessRecipe(new ItemStack(Items.bone), crFlint, new ItemStack(Items.chicken));
+    		GameRegistry.addShapelessRecipe(new ItemStack(Items.bone), crFlint, new ItemStack(Items.cooked_chicken));
+    		GameRegistry.addShapelessRecipe(new ItemStack(Items.bone), crFlint, new ItemStack(Items.rabbit));
+    		GameRegistry.addShapelessRecipe(new ItemStack(Items.bone), crFlint, new ItemStack(Items.cooked_rabbit));
+    		GameRegistry.addShapelessRecipe(new ItemStack(Items.bone), crFlint, new ItemStack(Items.fish, 1, OreDictionary.WILDCARD_VALUE));
+    		GameRegistry.addShapelessRecipe(new ItemStack(Items.bone), crFlint, new ItemStack(Items.cooked_fish, 1, OreDictionary.WILDCARD_VALUE));
+    	}
+    	if(nameTagRecipe)
+    		GameRegistry.addRecipe(new ItemStack(Items.name_tag), "  s", " p ", "p  ", 's', crString, 'p', new ItemStack(Items.paper));
+    	if(saddleRecipe)
+    		GameRegistry.addRecipe(new ItemStack(Items.saddle), "hwh", "hhh", "sis", 'h', new ItemStack(Items.leather), 'w', new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE), 's', crString, 'i', new ItemStack(Items.iron_ingot));
     		
     }
     
