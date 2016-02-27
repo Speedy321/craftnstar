@@ -20,16 +20,23 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+import speedy3210.craftablenetherstar.proxy.CommonProxy;
 
 @Mod(modid = CraftableNetherStar.MODID, name = CraftableNetherStar.NAME, version = CraftableNetherStar.VERSION)
 public class CraftableNetherStar{
+	
+	@SidedProxy(clientSide = "speedy3210.craftablenetherstar.proxy.ClientProxy", serverSide = "speedy3210.craftablenetherstar.proxy.ServerProxy")
+    public static CommonProxy proxy;
 	
 	public static Configuration config;
 	
@@ -53,14 +60,14 @@ public class CraftableNetherStar{
     public static Item starCore;
     public static Item bottledTear;
     
-    ItemStack crDiamondBlock = new ItemStack(Blocks.diamond_block);
-    ItemStack crGlowstoneBlock = new ItemStack(Blocks.glowstone);
-    ItemStack crDiamond = new ItemStack(Items.diamond);
-    ItemStack crBlazePwdr = new ItemStack(Items.blaze_powder);
-    ItemStack crBlazeRod = new ItemStack(Items.blaze_rod);
-    ItemStack crGlowPwdr =  new ItemStack(Items.glowstone_dust);
-    ItemStack crFlint = new ItemStack(Items.flint);
-    ItemStack crString = new ItemStack(Items.string);
+    static ItemStack crDiamondBlock = new ItemStack(Blocks.diamond_block);
+    static ItemStack crGlowstoneBlock = new ItemStack(Blocks.glowstone);
+    static ItemStack crDiamond = new ItemStack(Items.diamond);
+    static ItemStack crBlazePwdr = new ItemStack(Items.blaze_powder);
+    static ItemStack crBlazeRod = new ItemStack(Items.blaze_rod);
+    static ItemStack crGlowPwdr =  new ItemStack(Items.glowstone_dust);
+    static ItemStack crFlint = new ItemStack(Items.flint);
+    static ItemStack crString = new ItemStack(Items.string);
     
     @Instance(value = CraftableNetherStar.MODID)
     public static CraftableNetherStar instance;
@@ -71,22 +78,17 @@ public class CraftableNetherStar{
     	config = new Configuration(event.getSuggestedConfigurationFile());
     	syncConfig();
     	
-    	createItems();
-    	addRecipes();
-    	
+    	proxy.preInit(event);
     }
         
     @EventHandler
     public void load(FMLInitializationEvent event){
-    	    	
-    	Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(starBranch, 0, new ModelResourceLocation("craftnstar:starBranch", "inventory"));
-    	Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(starCore, 0, new ModelResourceLocation("craftnstar:starCore", "inventory"));
-    	Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(bottledTear, 0, new ModelResourceLocation("craftnstar:bottledTear", "inventory"));
-    
+    	proxy.load(event);
     }
         
     @EventHandler
     public void postInit(FMLPostInitializationEvent event){
+    	proxy.postInit(event);
     }
     
     @SubscribeEvent
@@ -117,7 +119,7 @@ public class CraftableNetherStar{
     	System.out.println("[CraftNS] Config Reloaded!");
 	}
     
-    private void addRecipes(){
+    public static void addRecipes(){
     	
     	//star recipes
     	if(starRecipe){
@@ -164,7 +166,7 @@ public class CraftableNetherStar{
     		
     }
     
-    private void createItems(){
+    public static void createItems(){
     	 
     	if(starRecipe){
     		starBranch = new ItemSimpleFoiled().setMaxStackSize(64).setCreativeTab(CreativeTabs.tabMaterials).setUnlocalizedName("starBranch");
