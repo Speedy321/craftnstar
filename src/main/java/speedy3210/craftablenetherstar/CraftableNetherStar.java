@@ -53,7 +53,7 @@ public class CraftableNetherStar{
 	public static boolean saddleRecipe = true;
     
     public static final String MODID = "craftnstar";
-    public static final String VERSION = "0.3.0";
+    public static final String VERSION = "0.3.1";
     public static final String NAME = "Craftable Nether Star +";
     
     public static Item starBranch;
