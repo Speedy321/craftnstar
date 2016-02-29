@@ -40,7 +40,7 @@ public class CraftableNetherStar{
 	
 	public static Configuration config;
 	
-	public static String recipeType = "NORMAL";
+	public static int recipeType = 0;
 	public static boolean starRecipe = true;
     public static boolean blazeRodRecipe = true;
     public static boolean ghastTearRecipe = true;
@@ -103,7 +103,7 @@ public class CraftableNetherStar{
     	config.load();
     	
     	starRecipe = config.getBoolean("Enable Nether Star Recipe",	Configuration.CATEGORY_GENERAL, starRecipe, "true = enabled");
-    	recipeType = config.getString("Nether Star Recipe Type", Configuration.CATEGORY_GENERAL, recipeType, "Crafting recipes: NORMAL, HARD, NETHER, random values will give default recipes.");
+    	recipeType = config.getInt("Nether Star Recipe Type", Configuration.CATEGORY_GENERAL, recipeType, 0, 2, "Crafting recipes: 0 = NORMAL, 1 = HARD, 2 = NETHER");
     	blazeRodRecipe = config.getBoolean("Enable Blaze Rod Recipe", Configuration.CATEGORY_GENERAL, blazeRodRecipe, "true = enabled");
     	ghastTearRecipe = config.getBoolean("Enable Ghast Tear Recipe", Configuration.CATEGORY_GENERAL, ghastTearRecipe, "true = enabled");
     	blazePowderRecipe = config.getBoolean("Enable Blaze Powder Recipe", Configuration.CATEGORY_GENERAL, blazePowderRecipe, "true = enabled");
@@ -114,6 +114,8 @@ public class CraftableNetherStar{
     	nameTagRecipe = config.getBoolean("Enable Name Tag Recipe", Configuration.CATEGORY_GENERAL, nameTagRecipe, "true = enabled");
     	saddleRecipe = config.getBoolean("Enable Saddle Recipe", Configuration.CATEGORY_GENERAL, saddleRecipe, "true = enabled");
     	
+    	System.out.println("RecipeType: "+recipeType);
+    	
     	if (config.hasChanged()) config.save();	
     	
     	System.out.println("[CraftNS] Config Reloaded!");
@@ -123,12 +125,12 @@ public class CraftableNetherStar{
     	
     	//star recipes
     	if(starRecipe){
-    		if(recipeType == "NETHER"){
+    		if(recipeType == 2){
     			GameRegistry.addRecipe(new ItemStack(starBranch), " d ", "dgd", "dgd", 'g', crGlowPwdr, 'd', crBlazeRod);
     			GameRegistry.addRecipe(new ItemStack(Items.nether_star), "xyx", "yzy", "xyx", 'x', crBlazePwdr, 'y', new ItemStack(starBranch), 'z', new ItemStack(starCore));
     			GameRegistry.addRecipe(new ItemStack(starCore), "gdg", "ded", "gdg", 'g', crGlowPwdr, 'd', crBlazeRod, 'e', new ItemStack(Blocks.emerald_block));
     		}else{
-    			if(recipeType == "HARD"){
+    			if(recipeType == 1){
     				GameRegistry.addRecipe(new ItemStack(starBranch), " d ", "dgd", "dgd", 'g', crGlowstoneBlock, 'd', crDiamondBlock);
     			}else{
     				GameRegistry.addRecipe(new ItemStack(starBranch), " d ", "dgd", "dgd", 'g', crGlowstoneBlock, 'd', crDiamond);
